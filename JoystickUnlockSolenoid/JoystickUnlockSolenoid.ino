@@ -57,20 +57,16 @@ void setup() {
 }
 
 int isUp (int xP, int yP){
-  return (yP>290 && xP>140 && xP<160)?1:0;
-}
+  return (yP>290 && xP>140 && xP<160)?1:0;}
 
 int isDown (int xP, int yP){
-  return (yP<10 && xP>140 && xP<160)?1:0;
-}
+  return (yP<10 && xP>140 && xP<160)?1:0;}
 
 int isRight (int xP, int yP){
-  return (xP>290 && yP>140 && yP<160)?1:0;
-}
+  return (xP>290 && yP>140 && yP<160)?1:0;}
 
 int isLeft (int xP, int yP){
-  return (xP<10 && yP>140 && yP<160)?1:0;
-}
+  return (xP<10 && yP>140 && yP<160)?1:0;}
 
 void loop() {
   // Robojax Dual Axis joystick project
@@ -93,7 +89,20 @@ if (isUp(xPos,yPos)==1){lcd.print("^");entered[pos]='^';pos++; digitalWrite(13,H
 else if (isDown(xPos,yPos)==1){lcd.print("v");entered[pos]='v';pos++; digitalWrite(13,HIGH); delay(400);}
 else if (isRight(xPos,yPos)==1){lcd.print(">");entered[pos]='>';pos++; digitalWrite(13,HIGH); delay(400);}
 else if (isLeft(xPos,yPos)==1){lcd.print("<");entered[pos]='<';pos++; digitalWrite(13,HIGH); delay(400);}
-//else digitalWrite(13,LOW); //Serial.println("UNKNOWN");
+else if (sStat == LOW){Serial.println("Switch pressed"); lcd.print("Switch");}
+else digitalWrite(13,LOW); //Serial.println("UNKNOWN");
+
+//BRANCH VERSION
+
+//if(sStat == LOW){
+//    Serial.println("Switch pressed");
+    //lcd.setCursor(0,0);
+//    lcd.print ("Switch");
+//    digitalWrite(13,HIGH);// Turn LED ON
+//  }else{
+//    digitalWrite(13,LOW);// Turn LED OFF
+//  }
+//  delay(400);
 
 if (pos==4){
     if( passwordCheck()){
@@ -113,13 +122,5 @@ if (pos==4){
   }
 
   
-  if(sStat ==LOW){
-    Serial.println("Switch pressed");
-    //lcd.setCursor(0,0);
-    lcd.print ("Switch");
-    digitalWrite(13,HIGH);// Turn LED ON
-  }else{
-    digitalWrite(13,LOW);// Turn LED OFF
-  }
-  delay(400);
+
 }
