@@ -20,7 +20,7 @@
  * This is a dual axis joystick skitch for Arduino.
  * The position of joystick is read and displayed on serial monitor
  */
-#define sw 6 
+#define sw A2
 #define screenWidth 300
 #define screenHeight 300
 
@@ -74,7 +74,7 @@ void loop() {
   int y = analogRead(A1);
   int xPos = map(x, 0, 1023,0,screenWidth);
   int yPos = map(y, 0, 1023,0,screenHeight); 
-  int sStat = digitalRead(sw);//
+  int sStat = digitalRead(sw);
   // Robojax project
 
 //  if(isUp(xPos,yPos)==1 || isDown(xPos,yPos)==1 || isRight(xPos,yPos)==1 || isLeft(xPos,yPos)==1){
@@ -92,7 +92,7 @@ else if (isLeft(xPos,yPos)==1){lcd.print("<");entered[pos]='<';pos++; digitalWri
 else if (sStat == LOW){Serial.println("Switch pressed"); lcd.print("Switch");}
 else digitalWrite(13,LOW); //Serial.println("UNKNOWN");
 
-//BRANCH VERSION
+
 
 //if(sStat == LOW){
 //    Serial.println("Switch pressed");
