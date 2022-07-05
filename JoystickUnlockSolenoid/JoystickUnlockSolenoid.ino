@@ -29,7 +29,7 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 const int RELAY_PIN = A3; //Solenoid Lock
 
-char password[]= {'v', 'v', 'v', 'v'};
+char password[]= {'v', 'v', 'v', 'v'};  //set password
 char entered[4];
 int pos = 0;
 
@@ -77,6 +77,7 @@ void loop() {
   int sStat = digitalRead(sw);
   // Robojax project
 
+
 //  if(isUp(xPos,yPos)==1 || isDown(xPos,yPos)==1 || isRight(xPos,yPos)==1 || isLeft(xPos,yPos)==1){
 //    Serial.print("X: ");
 //  Serial.print(xPos);
@@ -89,22 +90,32 @@ if (isUp(xPos,yPos)==1){lcd.print("^");entered[pos]='^';pos++; digitalWrite(13,H
 else if (isDown(xPos,yPos)==1){lcd.print("v");entered[pos]='v';pos++; digitalWrite(13,HIGH); delay(400);}
 else if (isRight(xPos,yPos)==1){lcd.print(">");entered[pos]='>';pos++; digitalWrite(13,HIGH); delay(400);}
 else if (isLeft(xPos,yPos)==1){lcd.print("<");entered[pos]='<';pos++; digitalWrite(13,HIGH); delay(400);}
-else if (sStat == LOW){Serial.println("Switch pressed"); lcd.print("Switch");}
 else digitalWrite(13,LOW); //Serial.println("UNKNOWN");
 
 
 
-//if(sStat == LOW){
-//    Serial.println("Switch pressed");
-    //lcd.setCursor(0,0);
-//    lcd.print ("Switch");
-//    digitalWrite(13,HIGH);// Turn LED ON
-//  }else{
-//    digitalWrite(13,LOW);// Turn LED OFF
-//  }
-//  delay(400);
 
-if (pos==4){
+//if(sStat == LOW){
+    //Serial.println("Switch pressed");
+    //lcd.setCursor(0,0);
+    //lcd.print ("Switch");
+   // digitalWrite(13,HIGH);// Turn LED ON
+ // }else{
+ //   digitalWrite(13,LOW);// Turn LED OFF
+//  }
+ // delay(400);
+
+ 
+if (sStat == LOW){
+  if (pos != 4) {
+      lcd.clear();
+      lcd.print("ERROR");
+      delay(2000);
+
+    lcd.clear();
+    entered[4]={}; 
+    }
+  else if (pos==4){                          //password units
     if( passwordCheck()){
       lcd.clear();
       lcd.print("SUCCESS");
@@ -115,12 +126,10 @@ if (pos==4){
     else{
       lcd.clear();
       lcd.print("ERROR");
-      delay(3000);  
+      delay(2000);  
     }
     lcd.clear();
     entered[4]={}; 
+    }
   }
-
-  
-
 }
