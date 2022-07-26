@@ -20,7 +20,7 @@ byte colPins[COLS] = {5, 4, 3, 2};
 
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS);
 
-char password[]= {'1', '4', '7', '*'};
+char password[]= {'3', '2', '4', '2'};
 char entered[4];
 int pos = 0;
 
@@ -55,14 +55,14 @@ void loop(){
   if (pos==4){
     if( passwordCheck()){
       lcd.clear();
-      lcd.print("SUCCESS");
+      lcd.print("Bravo!");
       digitalWrite(RELAY_PIN, LOW);  // Bounce out
       delay(2000);
       digitalWrite(RELAY_PIN, HIGH); // Lock in
     }
     else{
       lcd.clear();
-      lcd.print("ERROR");
+      lcd.print("Erreur");
       delay(3000);  
     }
     lcd.clear();

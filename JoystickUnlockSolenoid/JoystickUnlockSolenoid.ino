@@ -29,12 +29,12 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 const int RELAY_PIN = A3; //Solenoid Lock
 
-char password[]= {'v', 'v', 'v', 'v'};  //set password
-char entered[4];
+char password[]= {'^', '^', 'v', 'v','^','^','v','^','v','^','v','v'};  //set password ^ v > <
+char entered[12]; //change num
 int pos = 0;
 
 boolean passwordCheck(){
-  for (int i = 0;  i < 4; i++){
+  for (int i = 0;  i < 12; i++){ //change num
     if( entered[i] != password[i] ){
       return false;
     }
@@ -107,29 +107,29 @@ else digitalWrite(13,LOW); //Serial.println("UNKNOWN");
 
  
 if (sStat == LOW){
-  if (pos != 4) {
+  if (pos != 12) { //change num
       lcd.clear();
-      lcd.print("ERROR");
+      lcd.print("Erreur");
       delay(2000);
 
     lcd.clear();
-    entered[4]={}; 
+    entered[12]={}; //change num
     }
-  else if (pos==4){                          //password units
+  else if (pos==12){                          //password units, change num
     if( passwordCheck()){
       lcd.clear();
-      lcd.print("SUCCESS");
+      lcd.print("Bravo!");
       digitalWrite(RELAY_PIN, LOW);  // Bounce out
       delay(2000);
       digitalWrite(RELAY_PIN, HIGH); // Lock in
     }
     else{
       lcd.clear();
-      lcd.print("ERROR");
+      lcd.print("Erreur");
       delay(2000);  
     }
     lcd.clear();
-    entered[4]={}; 
+    entered[12]={}; 
     }
   }
 }
