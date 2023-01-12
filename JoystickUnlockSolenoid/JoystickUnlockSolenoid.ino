@@ -29,12 +29,12 @@ LiquidCrystal_I2C lcd(0x27,16,2);
 
 const int RELAY_PIN = A3; //Solenoid Lock
 
-char password[]= {'v', 'v', 'v', 'v'};
-char entered[4];
+char password[]= {'^', '^', 'v', 'v','^','^','v','^','v','^','v','v'};
+char entered[12];
 int pos = 0;
 
 boolean passwordCheck(){
-  for (int i = 0;  i < 4; i++){
+  for (int i = 0;  i < 12; i++){
     if( entered[i] != password[i] ){
       return false;
     }
@@ -95,31 +95,31 @@ else if (isRight(xPos,yPos)==1){lcd.print(">");entered[pos]='>';pos++; digitalWr
 else if (isLeft(xPos,yPos)==1){lcd.print("<");entered[pos]='<';pos++; digitalWrite(13,HIGH); delay(400);}
 //else digitalWrite(13,LOW); //Serial.println("UNKNOWN");
 
-if (pos==4){
+if (pos==12){
     if( passwordCheck()){
       lcd.clear();
-      lcd.print("SUCCESS");
+      lcd.print("BRAVO");
       digitalWrite(RELAY_PIN, LOW);  // Bounce out
       delay(2000);
       digitalWrite(RELAY_PIN, HIGH); // Lock in
     }
     else{
       lcd.clear();
-      lcd.print("ERROR");
+      lcd.print("ERREUR");
       delay(3000);  
     }
     lcd.clear();
-    entered[4]={}; 
+    entered[12]={}; 
   }
 
   
-  if(sStat ==LOW){
-    Serial.println("Switch pressed");
-    //lcd.setCursor(0,0);
-    lcd.print ("Switch");
-    digitalWrite(13,HIGH);// Turn LED ON
-  }else{
-    digitalWrite(13,LOW);// Turn LED OFF
-  }
+//  if(sStat ==LOW){
+//    Serial.println("Switch pressed");
+//    //lcd.setCursor(0,0);
+//    lcd.print ("Switch");
+//    digitalWrite(13,HIGH);// Turn LED ON
+//  }else{
+//    digitalWrite(13,LOW);// Turn LED OFF
+//  }
   delay(400);
 }

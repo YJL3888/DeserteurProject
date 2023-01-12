@@ -35,9 +35,9 @@
 #include <LCDWIKI_KBV.h> //Hardware-specific library
 
 //if the IC model is known or the modules is unreadable,you can use this constructed function
-LCDWIKI_KBV my_lcd(ILI9486,A3,A2,A1,A0,A4); //model,cs,cd,wr,rd,reset
+//LCDWIKI_KBV my_lcd(ILI9486,A3,A2,A1,A0,A4); //model,cs,cd,wr,rd,reset
 //if the IC model is not known and the modules is readable,you can use this constructed function
-//LCDWIKI_KBV my_lcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
+LCDWIKI_KBV my_lcd(320,480,A3,A2,A1,A0,A4);//width,height,cs,cd,wr,rd,reset
 
                              /*  r     g    b */
 #define BLACK        0x0000  /*   0,   0,   0 */
@@ -88,8 +88,8 @@ LCDWIKI_KBV my_lcd(ILI9486,A3,A2,A1,A0,A4); //model,cs,cd,wr,rd,reset
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
-//ADDED PASSWORD CONTROL
-char password[] = {'1','2','3','4'}; // ** SET PASSWORD 
+
+char password[] = {1,2,3,4}; // ** SET PASSWORD 
 char currentEntry[4];
 int EntryIndex = 0;
 
@@ -97,17 +97,11 @@ boolean passwordCheck(){
   Serial.println("PASS");
   for (int i = 0;  i < 4; i++){
     if( currentEntry[i] != password[i] ){
-      Serial.println("currentEntry[i]");
-      Serial.println(currentEntry[i]);
-      Serial.println("password[i]");
-      Serial.println(password[i]);
       return false;
     }
   }
   return true;
 }
-//END PASSWORD CONTROL
-
 
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
@@ -134,12 +128,12 @@ button_info phone_button[15] =
   "7",4,BLACK,CYAN,EDG_X+BUTTON_R-1,my_lcd.Get_Display_Height()-EDG_Y-2*BUTTON_SPACING_Y-5*BUTTON_R-1,
   "8",4,BLACK,CYAN,EDG_X+3*BUTTON_R+BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-2*BUTTON_SPACING_Y-5*BUTTON_R-1,
   "9",4,BLACK,CYAN,EDG_X+5*BUTTON_R+2*BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-2*BUTTON_SPACING_Y-5*BUTTON_R-1,
-  "0",4,BLACK,CYAN,EDG_X+BUTTON_R-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_SPACING_Y-3*BUTTON_R-1,
-  "ok",4,BLACK,GREEN,EDG_X+3*BUTTON_R+BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_SPACING_Y-3*BUTTON_R-1,
-  "del",4,BLACK,RED,EDG_X+5*BUTTON_R+2*BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_SPACING_Y-3*BUTTON_R-1,
-  "",3,BLUE,BLUE,EDG_X+BUTTON_R-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_R-1,
+  "",4,BLUE,BLUE,EDG_X+BUTTON_R-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_SPACING_Y-3*BUTTON_R-1,
+  "0",4,BLACK,CYAN,EDG_X+3*BUTTON_R+BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_SPACING_Y-3*BUTTON_R-1,
+  "",4,BLUE,BLUE,EDG_X+5*BUTTON_R+2*BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_SPACING_Y-3*BUTTON_R-1,
+  "ok",3,BLACK,GREEN,EDG_X+BUTTON_R-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_R-1,
   "",3,BLUE,BLUE,EDG_X+3*BUTTON_R+BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_R-1,
-  "",3,BLUE,BLUE,EDG_X+5*BUTTON_R+2*BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_R-1,
+  "del",3,BLACK,RED,EDG_X+5*BUTTON_R+2*BUTTON_SPACING_X-1,my_lcd.Get_Display_Height()-EDG_Y-BUTTON_R-1,
 };
 
 //display string
@@ -155,6 +149,7 @@ void show_string(uint8_t *str,int16_t x,int16_t y,uint8_t csize,uint16_t fc, uin
 //Check whether to press or not
 boolean is_pressed(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int16_t px,int16_t py)
 {
+  //Serial.println("test");
     if((px > x1 && px < x2) && (py > y1 && py < y2))
     {
         return true;  
@@ -174,6 +169,10 @@ void show_menu(void)
       my_lcd.Set_Draw_color(phone_button[i].button_colour);
       my_lcd.Fill_Circle(phone_button[i].button_x, phone_button[i].button_y, BUTTON_R);
       show_string(phone_button[i].button_name,phone_button[i].button_x-strlen(phone_button[i].button_name)*phone_button[i].button_name_size*6/2+phone_button[i].button_name_size/2+1,phone_button[i].button_y-phone_button[i].button_name_size*8/2+phone_button[i].button_name_size/2+1,phone_button[i].button_name_size,phone_button[i].button_name_colour,BLACK,1);
+//   Serial.println(phone_button[i].button_name[0]);
+//   Serial.println(phone_button[i].button_x);
+//   Serial.println(phone_button[i].button_y);
+//   Serial.println("XXXXXXXX");
    }
    my_lcd.Set_Draw_color(BLACK);
    my_lcd.Fill_Rectangle(1, 1, my_lcd.Get_Display_Width()-2, 3);
@@ -181,6 +180,7 @@ void show_menu(void)
    my_lcd.Fill_Rectangle(1, 1, 3, 47);
    my_lcd.Fill_Rectangle(my_lcd.Get_Display_Width()-4, 1, my_lcd.Get_Display_Width()-2, 47);
 }
+
                             
 void setup(void) 
 {
@@ -194,15 +194,6 @@ void setup(void)
 uint16_t text_x=7,text_y=10,text_x_add = 6*phone_button[0].button_name_size,text_y_add = 8*phone_button[0].button_name_size;
 uint16_t n=0;
 
-void ResetEntry(){
-  for(int i = 0; i < EntryIndex; i++){
-    my_lcd.Set_Draw_color(BLUE);
-    text_x -= (text_x_add-1);  
-    my_lcd.Fill_Rectangle(text_x, text_y, text_x+text_x_add-1, text_y+text_y_add-2);
-    n--;
-  }
-}
-
 void loop(void)
 {
   uint16_t i;
@@ -212,6 +203,11 @@ void loop(void)
 
   pinMode(XM, OUTPUT);
   pinMode(YP, OUTPUT);
+  //Serial.println("Touched");
+  //Serial.println(p.x);
+  //Serial.println(p.y);
+  //Serial.println(p.z);
+  //delay(5000);
   if (p.z > MINPRESSURE && p.z < MAXPRESSURE)
   {
     //p.x = my_lcd.Get_Display_Width()-map(p.x, TS_MINX, TS_MAXX, my_lcd.Get_Display_Width(), 0);
@@ -224,6 +220,7 @@ void loop(void)
          //press the button
          if(is_pressed(phone_button[i].button_x-BUTTON_R,phone_button[i].button_y-BUTTON_R,phone_button[i].button_x+BUTTON_R,phone_button[i].button_y+BUTTON_R,p.x,p.y))
          {
+          //Serial.println("Pressed");
               my_lcd.Set_Draw_color(DARKGREY);
               my_lcd.Fill_Circle(phone_button[i].button_x, phone_button[i].button_y, BUTTON_R);
               show_string(phone_button[i].button_name,phone_button[i].button_x-strlen(phone_button[i].button_name)*phone_button[i].button_name_size*6/2+phone_button[i].button_name_size/2+1,phone_button[i].button_y-phone_button[i].button_name_size*8/2+phone_button[i].button_name_size/2+1,phone_button[i].button_name_size,WHITE,BLACK,1);
@@ -231,46 +228,45 @@ void loop(void)
               my_lcd.Set_Draw_color(phone_button[i].button_colour);
               my_lcd.Fill_Circle(phone_button[i].button_x, phone_button[i].button_y, BUTTON_R);
               show_string(phone_button[i].button_name,phone_button[i].button_x-strlen(phone_button[i].button_name)*phone_button[i].button_name_size*6/2+phone_button[i].button_name_size/2+1,phone_button[i].button_y-phone_button[i].button_name_size*8/2+phone_button[i].button_name_size/2+1,phone_button[i].button_name_size,phone_button[i].button_name_colour,BLACK,1);  
-              if(i < 10)
+//              Serial.println(i);
+              if(i < 12)
               {
                   if(n < 13)
                   {
                     show_string(phone_button[i].button_name,text_x,text_y,phone_button[i].button_name_size,GREENYELLOW, BLACK,1);
-                    text_x += text_x_add-1;
+                    text_x += text_x_add-1; //random variable
                     n++;
-                    Serial.println((char)phone_button[i].button_name[0]);
+                    Serial.println("HERE");
                     currentEntry[EntryIndex] = (char)phone_button[i].button_name[0];
                     EntryIndex++;
+                    Serial.println((char)phone_button[i].button_name[0]);
+                    }
+//              else if(12 == i) //show calling ended NEW OK BUTTON
+//              {Serial.println(i);
+//                  if(passwordCheck()){
+//                    Serial.println("GOOD");
+//                  }
+//                  else{
+//                    Serial.println("NO");
+//                    EntryIndex = 0;
+//                    
+//                      my_lcd.Set_Draw_color(BLUE);
+//                      text_x -= (text_x_add-1);  
+//                      my_lcd.Fill_Rectangle(text_x, text_y, text_x+text_x_add-1, text_y+text_y_add-2);
+//                      n--;
                   }
-              }
-//              else if(12 == i) //show calling ended
-//              {
+                  
 //                  my_lcd.Set_Draw_color(BLUE);
 //                  my_lcd.Fill_Rectangle(0, 48, my_lcd.Get_Display_Width()-1, 60);
 //                  show_string("Calling ended",CENTER,52,1,RED, BLACK,1);  
-//              } 
-              else if(10 == i) //OK BUTTON
-              {
-                if(passwordCheck())
-                {
-                   //show_string("BRAVO",CENTER,52,5,RED, BLACK,1);
-                   Serial.println("GOOD");
-                   EntryIndex = 0;
-                   ResetEntry();
-                }
-                else
-                {
-                   //show_string("ERREUR",CENTER,52,5,RED, BLACK,1);
-                   Serial.println("NO");
-                   ResetEntry();
-                   EntryIndex = 0;
-                }
-
+               
+//              else if(13 == i) //show calling
+//              {
 //                  my_lcd.Set_Draw_color(BLUE);
 //                  my_lcd.Fill_Rectangle(0, 48, my_lcd.Get_Display_Width()-1, 60);
 //                  show_string("Calling...",CENTER,52,1,GREEN, BLACK,1);  
-              }
-              else if(11 == i) //delete button
+//              }
+              else if(14 == i) //delete button
               {
                   if(n > 0)
                   {
@@ -282,5 +278,5 @@ void loop(void)
               }
          }      
      }
-  }
-}
+  } 
+ }
